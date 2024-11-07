@@ -5,13 +5,14 @@ print("Bienvenido al juego de Memory")
 tableroVacio = []
 tableroEmoji = []
 emojisArray = []
+memoria_cpu = {}
 
 emojis = ["😀", "😁", "😂", "🤣", "🤓", "😄", "😅", "😆", "😎", "😐", "🤑", "😭", "😨", "🤯", "🥵"]
 
 # ----------------------ETAPA 1: CREACIÓN DEL TABLERO
 crearTablero = False
 # bucle para saber cuantas filas y columnas tendra el tablero
-while crearTablero == False:
+while not crearTablero:
     try:
         f = int(input("Introduce el número de filas (Min = 2x2, Max = 6x5): "))
         c = int(input("Introduce el número de columnas (Min = 2x2, Max = 6x5): "))
@@ -189,13 +190,14 @@ def PvP():
 
 # Bucle de la partida de jugador contra la CPU
 def PvAI():
+    global fc2, cc2
     j1 = input("Introduce el nombre del jugador 1: ")
     j1P, cpu = 0, 0
     # ---------------- Bucle de la partida jcj
     while True:
         # Turno del jugador 1
         while j1P != len(emojisArray):
-            print(f"Turno de {j1}: ")
+            print(f"\nTurno de {j1}: ")
             try:
                 while True:
                     try:
@@ -252,22 +254,22 @@ def PvAI():
 
         # Turno de la CPU
         while cpu != len(emojisArray):
-            memoria = []
-            print("Turno de CPU. ")
+
+            print("\nTurno de CPU. ")
             try:
                 while True:
                     try:
-                        fc1 = random.randint(0, f - 1)
-                        cc1 = random.randint(0, c - 1)
+                        if memoria_cpu:
+                            fc1, cc1 = random.choice(list(memoria_cpu.keys()))
+                        else:
+                            fc1 = random.randint(0, f - 1)
+                            cc1 = random.randint(0, c - 1)
 
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
+                                memoria_cpu[(fc1, cc1)] = tableroEmoji[fc1][cc1]
                                 break
-                            else:
-                                print()
-                        else:
-                            print()
                     except ValueError:
                         print("Posición inválida")
 
@@ -277,17 +279,23 @@ def PvAI():
 
                 while True:
                     try:
-                        fc2 = random.randint(0, f - 1)
-                        cc2 = random.randint(0, c - 1)
+                        pEncontrada = False
+
+                        for k, v in memoria_cpu.items():
+                            if v == tableroEmoji[fc1][cc1] and k != (fc1, cc1):
+                                fc2, cc2 = k
+                                pEncontrada = True
+                                break
+
+                        if not pEncontrada:
+                            fc2 = random.randint(0, f - 1)
+                            cc2 = random.randint(0, c - 1)
 
                         if 0 <= fc2 < f and 0 <= cc2 < c:
                             if tableroVacio[fc2][cc2] == "-":
                                 tableroVacio[fc2][cc2] = tableroEmoji[fc2][cc2]
+                                memoria_cpu[(fc2, cc2)] = tableroEmoji[fc2][cc2]
                                 break
-                            else:
-                                print()
-                        else:
-                            print(f"Introduce una posición válida, fila máx: {f} min: 1 y columna máx: {c} min: 1")
                     except ValueError:
                         print("Posición inválida")
 
@@ -297,6 +305,8 @@ def PvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu += 2
+                    memoria_cpu.pop((fc1, cc1), None)
+                    memoria_cpu.pop((fc2, cc2), None)
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
