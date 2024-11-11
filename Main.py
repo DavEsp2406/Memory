@@ -327,7 +327,7 @@ def AIvAI():
     cpu1, cpu2 = 0, 0
     while True:
         # Turno de la CPU1
-        while cpu1 != len(emojisArray):
+        while cpu1 != len(emojisArray) and cpu2 != len(emojisArray):
             time.sleep(1.5)
             print("\nTurno de la CPU 1. ")
             try:
@@ -395,7 +395,7 @@ def AIvAI():
                 print()
 
 
-        while cpu2 != len(emojisArray):
+        while cpu2 != len(emojisArray) and cpu1 != len(emojisArray):
             time.sleep(1.5)
             print("\nTurno de la CPU 2. ")
             try:
