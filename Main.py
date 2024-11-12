@@ -321,13 +321,15 @@ def PvAI():
 
         if cpu == len(emojisArray):
             print(f"\nHa ganado la CPU con {cpu} puntos")
-            break
 
 def AIvAI():
     cpu1, cpu2 = 0, 0
-    while True:
+    j1Acierta, j2Acierta = True, True
+    aciertos = 0
+    total = len(emojisArray)//2
+    while aciertos < total:
         # Turno de la CPU1
-        while cpu1 != len(emojisArray) and cpu2 != len(emojisArray):
+        while j1Acierta and aciertos < total:
             time.sleep(1.5)
             print("\nTurno de la CPU 1. ")
             try:
@@ -381,21 +383,23 @@ def AIvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu1 += 2
+                    aciertos += 1
                     memoria_cpu1.pop((fc1, cc1), None)
                     memoria_cpu1.pop((fc2, cc2), None)
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
-                    break
-                if cpu1 == len(emojisArray):
-                    print(f"\nHa ganado la CPU 1 con {cpu1} puntos")
-                    break
+                    j1Acierta = False
+                    j2Acierta = True
             except ValueError:
                 print()
 
+            if cpu1 == len(emojisArray):
+                print(f"\nHa ganado la CPU 1 con {cpu1} puntos")
+                break
 
-        while cpu2 != len(emojisArray) and cpu1 != len(emojisArray):
+        while j2Acierta and aciertos < total:
             time.sleep(1.5)
             print("\nTurno de la CPU 2. ")
             try:
@@ -449,21 +453,24 @@ def AIvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu2 += 2
+                    aciertos += 1
                     memoria_cpu2.pop((fc1, cc1), None)
                     memoria_cpu2.pop((fc2, cc2), None)
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
-                    break
-                if cpu2 == len(emojisArray):
-                    print(f"\nHa ganado la CPU 2 con {cpu2} puntos")
-                    break
+                    j2Acierta = False
+                    j1Acierta = True
             except ValueError:
                 print()
 
-
-
+    if cpu2 > cpu1:
+        print(f"\n¡La CPU 2 gana con {cpu2} puntos!")
+    elif cpu1 > cpu2:
+        print(f"\n¡La CPU 1 gana con {cpu1} puntos!")
+    else:
+        print(f"\n¡Es un empate!")
 
 while True:
     print("- Selecciona un modo de juego -")
@@ -481,4 +488,6 @@ while True:
             PvAI()
         case 3:
             AIvAI()
+        case _ :
+            print("Selecciona un modo válido")
     break
