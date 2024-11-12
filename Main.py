@@ -1,5 +1,6 @@
 import random
 import time
+from collections import OrderedDict
 
 print("Bienvenido al juego de Memory")
 
@@ -9,7 +10,7 @@ emojisArray = []
 memoria_cpu = {}
 memoria_cpu1 = {}
 memoria_cpu2 = {}
-total = len(emojisArray)//2
+
 
 emojis = ["😀", "😁", "😂", "🤣", "🤓", "😄", "😅", "😆", "😎", "😐", "🤑", "😭", "😨", "🤯", "🥵"]
 
@@ -70,19 +71,22 @@ for filas in range(f):
 print("Tablero creado. ¡Empieza el juego!")
 
 
-def PvP():
+def pvp():
     j1 = input("Introduce el nombre del jugador 1: ")
     j2 = input("Introduce el nombre del jugador 2: ")
     j1P, j2P = 0, 0
+    total = len(emojisArray) // 2
+    pTotales = 0
+    j1Acierta, j2Acierta = True, True
+
     # ---------------- Bucle de la partida jcj
-    while True:
+    while pTotales < total:
         # Turno del jugador 1
-        while j1P != len(emojisArray):
+        while j1Acierta and pTotales < total:
             print(f"Turno de {j1}: ")
             try:
                 while True:
                     try:
-                        print((len(emojisArray)))
                         fc1 = int(input("Selecciona la fila de la primera carta: ")) - 1
                         cc1 = int(input("Selecciona la columna de la primera carta: ")) - 1
 
@@ -122,11 +126,12 @@ def PvP():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j1P += 2
+                    pTotales += 1
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
-                    break
+                    j1Acierta, j2Acierta = False, True
             except ValueError:
                 print("Introduce una posición válida.")
 
@@ -135,7 +140,7 @@ def PvP():
             break
 
         # Turno del jugador 2
-        while j2P != len(emojisArray):
+        while j2Acierta and pTotales < total:
             print(f"Turno de {j2}: ")
             try:
                 while True:
@@ -179,22 +184,27 @@ def PvP():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j2P += 2
+                    pTotales += 1
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
-                    break
+                    j1Acierta, j2Acierta = True, False
             except ValueError:
                 print("Introduce una posición válida.")
 
-        if j2P == len(emojisArray):
-            print(f"\nFelicidades {j2}, ganaste la partida con {j2P} puntos")
-            break
+        if j1P > j2P:
+            print(f"\n¡Felicidades {j1}! Ganaste la partida con {j1P} puntos")
+        elif j2P > j1P:
+            print(f"\n¡Felicidades {j2}! Ganaste la partida con {j2P} puntos")
+        else:
+            print(f"\n¡Es un empate!")
 
 # -------------------------------Bucle de la partida de jugador contra la CPU
-def PvsCPU(n):
+def pvcpu(n):
     j1 = input("Introduce el nombre del jugador 1: ")
     j1P, cpu = 0, 0
+    total = len(emojisArray) // 2
     pTotales = 0
     j1Acierta, j2Acierta = True, True
     # ---------------- Bucle de la partida jcj
@@ -254,21 +264,21 @@ def PvsCPU(n):
             except ValueError:
                 print("Introduce una posición válida.")
 
-        if j1P == len(emojisArray):
-            print(f"\nFelicidades {j1}, ganaste la partida con {j1P} puntos")
-            break
-
         # Turno de la CPU
         while j2Acierta and pTotales < total:
             print("\nTurno de CPU. ")
             try:
                 while True:
                     try:
-                        if memoria_cpu:
-                            fc1, cc1 = random.choice(list(memoria_cpu.keys()))
-                        else:
+                        if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
+                        elif n == 2 or n == 3:
+                            if memoria_cpu:
+                                fc1, cc1 = random.choice(list(memoria_cpu.keys()))
+                            else:
+                                fc1 = random.randint(0, f - 1)
+                                cc1 = random.randint(0, c - 1)
 
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
@@ -323,14 +333,19 @@ def PvsCPU(n):
             except ValueError:
                 print()
 
-        if cpu == len(emojisArray):
-            print(f"\nHa ganado la CPU con {cpu} puntos")
+    if j1P > cpu:
+        print(f"\n¡Felicidades {j1}! Ganaste la partida con {j1P} puntos")
+    elif cpu > j1P:
+        print(f"\nHa ganado la partida la CPu con {cpu} puntos")
+    else:
+        print(f"\n¡Es un empate!")
 
 #------------Bucle de la partida del modo de juego CPu vs CPU
-def CPUvsCPU(n):
+def cpuvcpu(n):
     cpu1, cpu2 = 0, 0
     j1Acierta, j2Acierta = True, True
     pTotales = 0
+    total = len(emojisArray) // 2
     while pTotales < total:
         # Turno de la CPU1
         while j1Acierta and pTotales < total:
@@ -499,15 +514,15 @@ while True:
     modo = int(input())
     match modo:
         case 1:
-            PvP()
+            pvp()
         case 2:
             dificultad()
             dif = int(input())
-            PvsCPU(dif)
+            pvcpu(dif)
         case 3:
             dificultad()
             dif = int(input())
-            CPUvsCPU(dif)
+            cpuvcpu(dif)
         case _ :
             print("Selecciona un modo válido")
     break
