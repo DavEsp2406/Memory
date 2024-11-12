@@ -9,6 +9,7 @@ emojisArray = []
 memoria_cpu = {}
 memoria_cpu1 = {}
 memoria_cpu2 = {}
+total = len(emojisArray)//2
 
 emojis = ["😀", "😁", "😂", "🤣", "🤓", "😄", "😅", "😆", "😎", "😐", "🤑", "😭", "😨", "🤯", "🥵"]
 
@@ -190,15 +191,16 @@ def PvP():
             print(f"\nFelicidades {j2}, ganaste la partida con {j2P} puntos")
             break
 
-
-# Bucle de la partida de jugador contra la CPU
-def PvAI():
+# -------------------------------Bucle de la partida de jugador contra la CPU
+def PvsCPU(n):
     j1 = input("Introduce el nombre del jugador 1: ")
     j1P, cpu = 0, 0
+    pTotales = 0
+    j1Acierta, j2Acierta = True, True
     # ---------------- Bucle de la partida jcj
-    while True:
+    while pTotales < total:
         # Turno del jugador 1
-        while j1P != len(emojisArray):
+        while j1Acierta and pTotales < total:
             print(f"\nTurno de {j1}: ")
             try:
                 while True:
@@ -242,10 +244,12 @@ def PvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j1P += 2
+                    pTotales += 1
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
+                    j1Acierta, j2Acierta = False, True
                     break
             except ValueError:
                 print("Introduce una posición válida.")
@@ -255,8 +259,7 @@ def PvAI():
             break
 
         # Turno de la CPU
-        while cpu != len(emojisArray):
-
+        while j2Acierta and pTotales < total:
             print("\nTurno de CPU. ")
             try:
                 while True:
@@ -309,27 +312,28 @@ def PvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu += 2
+                    pTotales += 1
                     memoria_cpu.pop((fc1, cc1), None)
                     memoria_cpu.pop((fc2, cc2), None)
                 else:
                     tableroVacio[fc1][cc1] = "-"
                     tableroVacio[fc2][cc2] = "-"
                     print("¡Fallaste!")
-                    break
+                    j1Acierta, j2Acierta = True, False
             except ValueError:
                 print()
 
         if cpu == len(emojisArray):
             print(f"\nHa ganado la CPU con {cpu} puntos")
 
-def AIvAI():
+#------------Bucle de la partida del modo de juego CPu vs CPU
+def CPUvsCPU(n):
     cpu1, cpu2 = 0, 0
     j1Acierta, j2Acierta = True, True
-    aciertos = 0
-    total = len(emojisArray)//2
-    while aciertos < total:
+    pTotales = 0
+    while pTotales < total:
         # Turno de la CPU1
-        while j1Acierta and aciertos < total:
+        while j1Acierta and pTotales < total:
             time.sleep(1.5)
             print("\nTurno de la CPU 1. ")
             try:
@@ -383,7 +387,7 @@ def AIvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu1 += 2
-                    aciertos += 1
+                    pTotales += 1
                     memoria_cpu1.pop((fc1, cc1), None)
                     memoria_cpu1.pop((fc2, cc2), None)
                 else:
@@ -399,7 +403,7 @@ def AIvAI():
                 print(f"\nHa ganado la CPU 1 con {cpu1} puntos")
                 break
 
-        while j2Acierta and aciertos < total:
+        while j2Acierta and pTotales < total:
             time.sleep(1.5)
             print("\nTurno de la CPU 2. ")
             try:
@@ -453,7 +457,7 @@ def AIvAI():
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu2 += 2
-                    aciertos += 1
+                    pTotales += 1
                     memoria_cpu2.pop((fc1, cc1), None)
                     memoria_cpu2.pop((fc2, cc2), None)
                 else:
@@ -472,22 +476,40 @@ def AIvAI():
     else:
         print(f"\n¡Es un empate!")
 
-while True:
+
+def menu():
     print("- Selecciona un modo de juego -")
     print("-------------------------------")
     print("1 - Jugador contra Jugador")
     print("2 - Jugador contra CPU")
     print("3 - CPU vs CPU")
 
-    modo = int(input())
 
+def dificultad():
+    print("- Selecciona la dificultad de la CPU -")
+    print("--------------------------------------")
+    print("1 - Fácil")
+    print("2 - Normal")
+    print("3 - Dificil")
+
+
+
+while True:
+    menu()
+    modo = int(input())
     match modo:
         case 1:
             PvP()
         case 2:
-            PvAI()
+            dificultad()
+            dif = int(input())
+            PvsCPU(dif)
         case 3:
-            AIvAI()
+            dificultad()
+            dif = int(input())
+            CPUvsCPU(dif)
         case _ :
             print("Selecciona un modo válido")
     break
+
+
