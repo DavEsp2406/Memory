@@ -206,6 +206,7 @@ def pvcpu(n):
     j1P, cpu = 0, 0
     total = len(emojisArray) // 2
     pTotales = 0
+    memoria_cpu = OrderedDict()
     j1Acierta, j2Acierta = True, True
     # ---------------- Bucle de la partida jcj
     while pTotales < total:
@@ -283,7 +284,13 @@ def pvcpu(n):
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
-                                memoria_cpu[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 2:
+                                    if len(memoria_cpu) >= 2:
+                                        memoria_cpu.popitem(last=False)
+                                    else:
+                                        memoria_cpu[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 3:
+                                    memoria_cpu[(fc1, cc1)] = tableroEmoji[fc1][cc1]
                                 break
                     except ValueError:
                         print("Posición inválida")
@@ -292,7 +299,7 @@ def pvcpu(n):
                     print(" ".join(fila))
                 print()
 
-                time.sleep(2)
+                time.sleep(1.5)
 
                 while True:
                     try:
@@ -311,13 +318,21 @@ def pvcpu(n):
                         if 0 <= fc2 < f and 0 <= cc2 < c:
                             if tableroVacio[fc2][cc2] == "-":
                                 tableroVacio[fc2][cc2] = tableroEmoji[fc2][cc2]
-                                memoria_cpu[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 2:
+                                    if len(memoria_cpu) >= 2:
+                                        memoria_cpu.popitem(last=False)
+                                    else:
+                                        memoria_cpu[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 3:
+                                    memoria_cpu[(fc2, cc2)] = tableroEmoji[fc2][cc2]
                                 break
                     except ValueError:
                         print("Posición inválida")
 
                 for fila in tableroVacio:
                     print(" ".join(fila))
+
+                time.sleep(1.5)
 
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
@@ -344,6 +359,8 @@ def pvcpu(n):
 def cpuvcpu(n):
     cpu1, cpu2 = 0, 0
     j1Acierta, j2Acierta = True, True
+    memoria_cpu1 = OrderedDict()
+    memoria_cpu2 = OrderedDict()
     pTotales = 0
     total = len(emojisArray) // 2
     while pTotales < total:
@@ -354,16 +371,26 @@ def cpuvcpu(n):
             try:
                 while True:
                     try:
-                        if memoria_cpu1:
-                            fc1, cc1 = random.choice(list(memoria_cpu1.keys()))
-                        else:
+                        if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
+                        elif n == 2 or n == 3:
+                            if memoria_cpu1:
+                                fc1, cc1 = random.choice(list(memoria_cpu1.keys()))
+                            else:
+                                fc1 = random.randint(0, f - 1)
+                                cc1 = random.randint(0, c - 1)
 
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
-                                memoria_cpu1[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 2:
+                                    if len(memoria_cpu1) >= 2:
+                                        memoria_cpu1.popitem(last=False)
+                                    else:
+                                        memoria_cpu1[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 3:
+                                    memoria_cpu1[(fc1, cc1)] = tableroEmoji[fc1][cc1]
                                 break
                     except ValueError:
                         print("Posición inválida")
@@ -391,7 +418,13 @@ def cpuvcpu(n):
                         if 0 <= fc2 < f and 0 <= cc2 < c:
                             if tableroVacio[fc2][cc2] == "-":
                                 tableroVacio[fc2][cc2] = tableroEmoji[fc2][cc2]
-                                memoria_cpu1[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 2:
+                                    if len(memoria_cpu1) >= 2:
+                                        memoria_cpu1.popitem(last=False)
+                                    else:
+                                        memoria_cpu1[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 3:
+                                    memoria_cpu1[(fc2, cc2)] = tableroEmoji[fc2][cc2]
                                 break
                     except ValueError:
                         print("Posición inválida")
@@ -424,16 +457,26 @@ def cpuvcpu(n):
             try:
                 while True:
                     try:
-                        if memoria_cpu2:
-                            fc1, cc1 = random.choice(list(memoria_cpu2.keys()))
-                        else:
+                        if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
+                        elif n == 2 or n == 3:
+                            if memoria_cpu2:
+                                fc1, cc1 = random.choice(list(memoria_cpu2.keys()))
+                            else:
+                                fc1 = random.randint(0, f - 1)
+                                cc1 = random.randint(0, c - 1)
 
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
-                                memoria_cpu2[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 2:
+                                    if len(memoria_cpu2) >= 2:
+                                        memoria_cpu2.popitem(last=False)
+                                    else:
+                                        memoria_cpu2[(fc1, cc1)] = tableroEmoji[fc1][cc1]
+                                if n == 3:
+                                    memoria_cpu2[(fc1, cc1)] = tableroEmoji[fc1][cc1]
                                 break
                     except ValueError:
                         print("Posición inválida")
@@ -461,7 +504,13 @@ def cpuvcpu(n):
                         if 0 <= fc2 < f and 0 <= cc2 < c:
                             if tableroVacio[fc2][cc2] == "-":
                                 tableroVacio[fc2][cc2] = tableroEmoji[fc2][cc2]
-                                memoria_cpu2[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 2:
+                                    if len(memoria_cpu2) >= 2:
+                                        memoria_cpu2.popitem(last=False)
+                                    else:
+                                        memoria_cpu2[(fc2, cc2)] = tableroEmoji[fc2][cc2]
+                                if n == 3:
+                                    memoria_cpu2[(fc2, cc2)] = tableroEmoji[fc2][cc2]
                                 break
                     except ValueError:
                         print("Posición inválida")
