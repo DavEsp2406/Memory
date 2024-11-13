@@ -87,6 +87,7 @@ def pvp():
             try:
                 while True:
                     try:
+                        #posición carta 1
                         fc1 = int(input("Selecciona la fila de la primera carta: ")) - 1
                         cc1 = int(input("Selecciona la columna de la primera carta: ")) - 1
 
@@ -106,6 +107,7 @@ def pvp():
 
                 while True:
                     try:
+                        #posición carta 2
                         fc2 = int(input("Selecciona la fila de la segunda carta: ")) - 1
                         cc2 = int(input("Selecciona la columna de la segunda carta: ")) - 1
 
@@ -122,7 +124,7 @@ def pvp():
 
                 for fila in tableroVacio:
                     print(" ".join(fila))
-
+                #condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j1P += 2
@@ -135,9 +137,6 @@ def pvp():
             except ValueError:
                 print("Introduce una posición válida.")
 
-        if j1P == len(emojisArray):
-            print(f"\nFelicidades {j1}, ganaste la partida con {j1P} puntos")
-            break
 
         # Turno del jugador 2
         while j2Acierta and pTotales < total:
@@ -145,6 +144,7 @@ def pvp():
             try:
                 while True:
                     try:
+                        #posicion carta 1
                         fc1 = int(input("Selecciona la fila de la primera carta: ")) - 1
                         cc1 = int(input("Selecciona la columna de la primera carta: ")) - 1
 
@@ -164,6 +164,7 @@ def pvp():
 
                 while True:
                     try:
+                        #posicon carta 2
                         fc2 = int(input("Selecciona la fila de la segunda carta: ")) - 1
                         cc2 = int(input("Selecciona la columna de la segunda carta: ")) - 1
 
@@ -180,7 +181,7 @@ def pvp():
 
                 for fila in tableroVacio:
                     print(" ".join(fila))
-
+                # condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j2P += 2
@@ -192,7 +193,7 @@ def pvp():
                     j1Acierta, j2Acierta = True, False
             except ValueError:
                 print("Introduce una posición válida.")
-
+        #condicion de victoria
         if j1P > j2P:
             print(f"\n¡Felicidades {j1}! Ganaste la partida con {j1P} puntos")
         elif j2P > j1P:
@@ -208,7 +209,7 @@ def pvcpu(n):
     pTotales = 0
     memoria_cpu = OrderedDict()
     j1Acierta, j2Acierta = True, True
-    # ---------------- Bucle de la partida jcj
+
     while pTotales < total:
         # Turno del jugador 1
         while j1Acierta and pTotales < total:
@@ -216,6 +217,7 @@ def pvcpu(n):
             try:
                 while True:
                     try:
+                        #posicon carta 1
                         fc1 = int(input("Selecciona la fila de la primera carta: ")) - 1
                         cc1 = int(input("Selecciona la columna de la primera carta: ")) - 1
 
@@ -235,6 +237,7 @@ def pvcpu(n):
 
                 while True:
                     try:
+                        #posicon carta 2
                         fc2 = int(input("Selecciona la fila de la segunda carta: ")) - 1
                         cc2 = int(input("Selecciona la columna de la segunda carta: ")) - 1
 
@@ -251,7 +254,7 @@ def pvcpu(n):
 
                 for fila in tableroVacio:
                     print(" ".join(fila))
-
+                # condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     j1P += 2
@@ -271,9 +274,11 @@ def pvcpu(n):
             try:
                 while True:
                     try:
+                        #carta aleatorio modo facil
                         if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
+                        #memoria modo normal/dificil
                         elif n == 2 or n == 3:
                             if memoria_cpu:
                                 fc1, cc1 = random.choice(list(memoria_cpu.keys()))
@@ -284,6 +289,7 @@ def pvcpu(n):
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
+                                #capacidad de memoria en funcion de dificultad
                                 if n == 2:
                                     if len(memoria_cpu) >= 2:
                                         memoria_cpu.popitem(last=False)
@@ -304,13 +310,13 @@ def pvcpu(n):
                 while True:
                     try:
                         pEncontrada = False
-
+                        #busqueda de la pareja de la carta 1 en el diccionario
                         for k, v in memoria_cpu.items():
                             if v == tableroEmoji[fc1][cc1] and k != (fc1, cc1):
                                 fc2, cc2 = k
                                 pEncontrada = True
                                 break
-
+                        #posicion carta 2
                         if not pEncontrada:
                             fc2 = random.randint(0, f - 1)
                             cc2 = random.randint(0, c - 1)
@@ -333,7 +339,7 @@ def pvcpu(n):
                     print(" ".join(fila))
 
                 time.sleep(1.5)
-
+                # condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu += 2
@@ -347,7 +353,7 @@ def pvcpu(n):
                     j1Acierta, j2Acierta = True, False
             except ValueError:
                 print()
-
+    #condicion de victoria/empate
     if j1P > cpu:
         print(f"\n¡Felicidades {j1}! Ganaste la partida con {j1P} puntos")
     elif cpu > j1P:
@@ -371,6 +377,7 @@ def cpuvcpu(n):
             try:
                 while True:
                     try:
+                        #posicion de carta 1
                         if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
@@ -384,6 +391,7 @@ def cpuvcpu(n):
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
+                                #capacidad de memoria
                                 if n == 2:
                                     if len(memoria_cpu1) >= 2:
                                         memoria_cpu1.popitem(last=False)
@@ -404,7 +412,7 @@ def cpuvcpu(n):
                 while True:
                     try:
                         pEncontrada = False
-
+                        #busqueda de pareja carta 1
                         for k, v in memoria_cpu1.items():
                             if v == tableroEmoji[fc1][cc1] and k != (fc1, cc1):
                                 fc2, cc2 = k
@@ -432,6 +440,7 @@ def cpuvcpu(n):
                 for fila in tableroVacio:
                     print(" ".join(fila))
 
+                # condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu1 += 2
@@ -447,16 +456,13 @@ def cpuvcpu(n):
             except ValueError:
                 print()
 
-            if cpu1 == len(emojisArray):
-                print(f"\nHa ganado la CPU 1 con {cpu1} puntos")
-                break
-
         while j2Acierta and pTotales < total:
             time.sleep(1.5)
             print("\nTurno de la CPU 2. ")
             try:
                 while True:
                     try:
+                        #posicion carta 1
                         if n == 1:
                             fc1 = random.randint(0, f - 1)
                             cc1 = random.randint(0, c - 1)
@@ -470,6 +476,7 @@ def cpuvcpu(n):
                         if 0 <= fc1 < f and 0 <= cc1 < c:
                             if tableroVacio[fc1][cc1] == "-":
                                 tableroVacio[fc1][cc1] = tableroEmoji[fc1][cc1]
+                                #capacidad de memoria
                                 if n == 2:
                                     if len(memoria_cpu2) >= 2:
                                         memoria_cpu2.popitem(last=False)
@@ -490,7 +497,7 @@ def cpuvcpu(n):
                 while True:
                     try:
                         pEncontrada = False
-
+                        #busqueda de pareja carta 1
                         for k, v in memoria_cpu2.items():
                             if v == tableroEmoji[fc1][cc1] and k != (fc1, cc1):
                                 fc2, cc2 = k
@@ -504,6 +511,7 @@ def cpuvcpu(n):
                         if 0 <= fc2 < f and 0 <= cc2 < c:
                             if tableroVacio[fc2][cc2] == "-":
                                 tableroVacio[fc2][cc2] = tableroEmoji[fc2][cc2]
+                                #capacidad memoria
                                 if n == 2:
                                     if len(memoria_cpu2) >= 2:
                                         memoria_cpu2.popitem(last=False)
@@ -517,7 +525,7 @@ def cpuvcpu(n):
 
                 for fila in tableroVacio:
                     print(" ".join(fila))
-
+                # condición para si se acierta o falla la pareja
                 if tableroVacio[fc1][cc1] == tableroVacio[fc2][cc2]:
                     print("¡Enhorabuena, encontraste una pareja!")
                     cpu2 += 2
@@ -532,7 +540,7 @@ def cpuvcpu(n):
                     j1Acierta = True
             except ValueError:
                 print()
-
+#condicion de victorio/empate
     if cpu2 > cpu1:
         print(f"\n¡La CPU 2 gana con {cpu2} puntos!")
     elif cpu1 > cpu2:
@@ -540,7 +548,7 @@ def cpuvcpu(n):
     else:
         print(f"\n¡Es un empate!")
 
-
+#menu seleccion de modo de juego
 def menu():
     print("- Selecciona un modo de juego -")
     print("-------------------------------")
@@ -548,7 +556,7 @@ def menu():
     print("2 - Jugador contra CPU")
     print("3 - CPU vs CPU")
 
-
+#menu dificultad
 def dificultad():
     print("- Selecciona la dificultad de la CPU -")
     print("--------------------------------------")
@@ -557,7 +565,7 @@ def dificultad():
     print("3 - Dificil")
 
 
-
+#selección de modo de juego
 while True:
     menu()
     modo = int(input())
